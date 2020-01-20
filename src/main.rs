@@ -24,6 +24,7 @@ mod prelude;
 mod schema;
 mod service;
 mod utils;
+mod common;
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
