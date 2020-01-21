@@ -59,6 +59,50 @@ impl PathMatcher for AntPathMatcher {
   }
 }
 
+
+struct PatternInfo{
+  pattern:String,
+  uri_vars: i32,
+  single_wildcards: i32,
+  double_wildcards: i32,
+  catch_all_pattern: bool,
+  prefix_pattern: bool,
+  length:usize,
+}
+
+impl PatternInfo{
+  pub fn new(pattern:&mut String)->Self{
+      let pattern :String=pattern.clone();
+      let uri_vars =0;
+    
+      let pattern_info=PatternInfo{
+        pattern:pattern,
+        uri_vars:0,
+        single_wildcards:0,
+        double_wildcards:0,
+        catch_all_pattern:false,
+        prefix_pattern:false,
+        length:0,
+      };
+      return pattern_info
+  }
+
+  pub fn get_total_count(&self) -> i32{
+    self.uri_vars+self.single_wildcards+self.double_wildcards*2
+  }
+
+ // Returns the length of the given pattern, where template variables are considered to be 1 long.
+  pub fn get_length(&self) -> usize{
+     let after = Regex::new(VARIABLE_PATTERN).unwrap().replace_all(&self.pattern, "#");
+
+     after.chars().count()
+  }
+
+}
+
+
+
+
 struct PathSeparatorPatternCache {
   ends_on_wildcard: String,
   ends_on_double_wildcard: String,
